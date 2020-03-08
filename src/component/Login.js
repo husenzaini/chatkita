@@ -34,7 +34,11 @@ class Login extends Component {
             <Input style={styles.inputStyle} secureTextEntry={true} />
           </Item>
         </Form>
-        <Button block info style={styles.footerBottomStyle}>
+        <Button
+          block
+          info
+          style={styles.footerBottomStyle}
+          onPress={() => this.props.navigation.navigate('Navigation')}>
           <Text>Sign In</Text>
         </Button>
         <View style={styles.footersignUpStyle}>

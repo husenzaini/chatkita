@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Feather from 'react-native-vector-icons/Ionicons';
 
 function HomeScreen() {
   return (
@@ -25,7 +26,18 @@ function MyTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: () => (
+            <View>
+              <Feather size={40} name={'md-map'} />
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
