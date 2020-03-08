@@ -6,7 +6,6 @@
 //  * @flow
 //  */
 
-import React from 'react';
 // import {
 //   SafeAreaView,
 //   StyleSheet,
@@ -28,9 +27,10 @@ import React from 'react';
 
 // export default App;
 // In App.js in a new project
-// import Login from './src/component/Login';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from './src/component/Login';
+// import Register from './src/component/Register';
 import MainNavigators from './src/navigator/MainNavigators';
 import {NavigationContainer} from '@react-navigation/native';
 const Stack = createStackNavigator();
