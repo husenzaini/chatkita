@@ -3,11 +3,39 @@ import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {Item, Input, Form, Label, Button, Thumbnail, Text} from 'native-base';
 import Bgimage from '../image/cerah.jpg';
 import Logo from '../image/tele.jpg';
+import firebaseSvc from '../config/Firebase';
 
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      email: '',
+      password: '',
+    };
   }
+  onPressLogin = async () => {
+    const user = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    console.log(user);
+    firebaseSvc.login(user, this.loginSuccess, this.loginFailed);
+  };
+  loginSuccess = () => {
+    console.log('login successful, navigate to chat.');
+    this.props.navigation.navigate('Chat', {
+      email: this.state.email,
+    });
+  };
+  loginFailed = () => {
+    alert('Login failure. Please tried again.');
+  };
+  onChangeTextEmail = email => {
+    this.setState({email});
+  };
+  onChangeTextPassword = password => {
+    this.setState({password});
+  };
   render() {
     return (
       <View style={styles.containerStyle}>
@@ -20,10 +48,13 @@ class Login extends Component {
           <Item floatingLabel>
             <Label>
               <Text style={styles.inputStyle} />
-              Phone Number
+              Email
               <Text />
             </Label>
-            <Input style={styles.inputStyle} />
+            <Input
+              style={styles.inputStyle}
+              onChangeText={e => this.onChangeTextEmail(e)}
+            />
           </Item>
           <Item floatingLabel>
             <Label>
@@ -31,18 +62,23 @@ class Login extends Component {
               Password
               <Text />
             </Label>
-            <Input style={styles.inputStyle} secureTextEntry={true} />
+            <Input
+              style={styles.inputStyle}
+              secureTextEntry={true}
+              onChangeText={e => this.onChangeTextPassword(e)}
+            />
           </Item>
         </Form>
         <Button
           block
           info
           style={styles.footerBottomStyle}
-          onPress={() => this.props.navigation.navigate('Navigation')}>
+          onPress={() => this.onPressLogin()}>
           <Text>Sign In</Text>
         </Button>
         <View style={styles.footersignUpStyle}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Register')}>
             <Text style={styles.signUpStyle}>
               Don't have an account? Register Now
             </Text>

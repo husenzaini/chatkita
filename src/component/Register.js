@@ -1,20 +1,42 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  View,
-  Platform,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import {Item, Input, Form, Button, Thumbnail, Text} from 'native-base';
-import Icons from 'react-native-vector-icons';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {Item, Input, Form, Label, Button, Thumbnail, Text} from 'native-base';
 import Bgimage from '../image/cerah.jpg';
 import Logo from '../image/tele.jpg';
+import firebaseSvc from '../config/Firebase';
 
 class Register extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      name: '',
+      email: '',
+      password: '',
+    };
   }
+
+  onPressCreate = async () => {
+    try {
+      const user = {
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password,
+      };
+      await firebaseSvc.createAccount(user);
+    } catch ({message}) {
+      alert('create account failed. catch error:' + message);
+    }
+  };
+
+  onChangeTextEmail = email => {
+    this.setState({email});
+  };
+  onChangeTextPassword = password => {
+    this.setState({password});
+  };
+  onChangeTextName = name => {
+    this.setState({name});
+  };
   render() {
     return (
       <View style={styles.containerStyle}>
@@ -23,39 +45,54 @@ class Register extends Component {
           <Thumbnail square large source={Logo} />
           <Text styles={styles.textLogoStyle}>React Native App</Text>
         </View>
-        <Form style={styles.formRegisterStyle}>
-          <Item style={styles.itemStyle}>
-            <Icons
-              name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'}
-              size={26}
-              color={'white'}
+        <Form style={styles.formLoginStyle}>
+          <Item floatingLabel>
+            <Label>
+              <Text style={styles.inputStyle} />
+              Name
+              <Text />
+            </Label>
+            <Input
+              style={styles.inputStyle}
+              onChangeText={e => this.onChangeTextName(e)}
             />
-            <Input style={styles.inputStyle} />
           </Item>
-          <Item style={styles.itemStyle}>
-            <Icons
-              name={Platform.OS === 'ios' ? 'ios-lock' : 'md-lock'}
-              size={26}
-              color={'white'}
+          <Item floatingLabel>
+            <Label>
+              <Text style={styles.inputStyle} />
+              Email
+              <Text />
+            </Label>
+            <Input
+              style={styles.inputStyle}
+              onChangeText={e => this.onChangeTextEmail(e)}
             />
-            <Input style={styles.inputStyle} secureTextEntry={true} />
           </Item>
-          <Item style={styles.itemStyle}>
-            <Icons
-              name={Platform.OS === 'ios' ? 'ios-mail' : 'md-mail'}
-              size={26}
-              color={'white'}
+          <Item floatingLabel>
+            <Label>
+              <Text style={styles.inputStyle} />
+              Password
+              <Text />
+            </Label>
+            <Input
+              style={styles.inputStyle}
+              secureTextEntry={true}
+              onChangeText={e => this.onChangeTextPassword(e)}
             />
-            <Input style={styles.inputStyle} />
           </Item>
         </Form>
-        <Button block info style={styles.footerBottomStyle}>
-          <Text>Register</Text>
+        <Button
+          block
+          info
+          style={styles.footerBottomStyle}
+          onPress={() => this.onPressCreate()}>
+          <Text>Sign In</Text>
         </Button>
         <View style={styles.footersignUpStyle}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Login')}>
             <Text style={styles.signUpStyle}>
-              Already have an account? Sign In Here
+              Already have an account? sign in here
             </Text>
           </TouchableOpacity>
         </View>
@@ -86,18 +123,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
-  formRegisterStyle: {
+  formLoginStyle: {
     marginTop: -30,
     paddingLeft: 10,
     paddingRight: 30,
   },
-  itemStyle: {
-    marginTop: 5,
-  },
   inputStyle: {
     color: 'white',
-    marginBottom: 1,
-    marginLeft: 5,
+    marginBottom: 6,
     fontSize: 14,
   },
   footerBottomStyle: {
@@ -116,4 +149,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
 export default Register;
